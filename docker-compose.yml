@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  fintrack-api:
+    build: .
+    container_name: fintrack-api
+    ports:
+      - "8080:8080"
+    networks:
+      - fintrack-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - fintrack-network
+    depends_on:
+      - fintrack-api
+
+networks:
+  fintrack-network:
+    driver: bridge
